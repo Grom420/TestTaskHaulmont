@@ -9,6 +9,7 @@ import com.example.demo.services.CreditServiceImpl;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -26,8 +27,6 @@ public class CreditOfferAddFormView extends VerticalLayout {
     private ClientServiceImpl clientService;
     private CreditServiceImpl creditService;
 
-    private TextField clientUUID = new TextField("Client UUID");
-    private TextField creditUUID = new TextField("Credit UUID");
     private ComboBox<String> clientPassportLabel = new ComboBox<>("Client passport");
     private ComboBox<String> creditNameLabel = new ComboBox<>("Credit name");
     private TextField sumCredit = new TextField("Sum credit");
@@ -41,9 +40,6 @@ public class CreditOfferAddFormView extends VerticalLayout {
         this.creditOfferServiceImpl = creditOfferServiceImpl;
         this.clientService = clientService;
         this.creditService = creditService;
-
-        clientUUID.setReadOnly(true);
-        creditUUID.setReadOnly(true);
 
         List<Client> clients = clientService.findAll();
         clientPassportLabel.setItems(clients
@@ -67,12 +63,20 @@ public class CreditOfferAddFormView extends VerticalLayout {
 
 
     private void addCreditOffer() {
-        Credit credit = new Credit();
-        credit.setCreditName(creditNameLabel.getValue());
-        Client client = new Client();
-        client.setPassport(clientPassportLabel.getValue());
-        CreditOffer creditOffer = new CreditOffer(client, credit, Long.parseLong(sumCredit.getValue()), Integer.parseInt(creditTerm.getValue()));
-        creditOfferServiceImpl.addCreditOffer(creditOffer);
-        creditOfferView.updateList();
+        if(isEmptyFields()){
+            Notification.show("Please enter all details");
+        } else {
+            Credit credit = new Credit();
+            credit.setCreditName(creditNameLabel.getValue());
+            Client client = new Client();
+            client.setPassport(clientPassportLabel.getValue());
+            CreditOffer creditOffer = new CreditOffer(client, credit, Long.parseLong(sumCredit.getValue()), Integer.parseInt(creditTerm.getValue()));
+            creditOfferServiceImpl.addCreditOffer(creditOffer);
+            creditOfferView.updateList();
+        }
+    }
+
+    private boolean isEmptyFields(){
+        return sumCredit.getValue().equals("") && creditTerm.getValue().equals("");
     }
 }

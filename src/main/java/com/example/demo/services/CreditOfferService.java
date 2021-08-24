@@ -10,5 +10,5 @@ public interface CreditOfferService {
     List<CreditOffer> findAll();
     boolean addCreditOffer(CreditOffer creditOffer);
     void updateCreditOffer(CreditOffer creditOffer);
-    void removeCreditOffer(CreditOffer creditOffer);
+    boolean removeCreditOffer(CreditOffer creditOffer);
 }

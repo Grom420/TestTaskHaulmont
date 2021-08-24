@@ -65,14 +65,19 @@ public class CreditOfferServiceImpl implements CreditOfferService{
                 .equals(client.getClientUUID())) && (creditOffer.getCreditUUID().equals(credit.getCreditUUID())));
     }
 
-
     public void updateCreditOffer(CreditOffer creditOffer) {
         creditOffer.setSumOfMonth(calculateSumOfMonth(creditOffer));
         creditOfferRepos.save(creditOffer);
     }
 
-    public void removeCreditOffer(CreditOffer creditOffer) {
-        creditOfferRepos.delete(creditOffer);
+    public boolean removeCreditOffer(CreditOffer creditOffer) {
+        CreditOffer present = creditOfferRepos.findByOfferUUID(creditOffer.getOfferUUID());
+        if (present != null) {
+            creditOfferRepos.delete(present);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public long calculateSumOfMonth(CreditOffer creditOffer){ //вычисление суммы за один месяц с учетом процентов
@@ -94,8 +99,7 @@ public class CreditOfferServiceImpl implements CreditOfferService{
             sumOfBody = paymentSum - sumOfPercent;
             sumOfCredit = sumOfCredit - sumOfBody;
             localDate = localDate.plusMonths(1);
-            Payment payment = new Payment(localDate, paymentSum, sumOfBody, sumOfPercent, sumOfCredit);
-            paymentRepos.save(payment);
+            paymentRepos.save(new Payment(localDate, paymentSum, sumOfBody, sumOfPercent, sumOfCredit));
         }
     }
 }
