@@ -38,11 +38,11 @@ public class CreditOfferEdit extends FormLayout {
         add(sumCredit, buttons);
         CreditOffer creditOffer = new CreditOffer();
         binder.forField(sumCredit)
-                .withConverter(new StringToLongConverter("must be integer"))
+                .withConverter(new StringToLongConverter("must be long"))
                 .bind(CreditOffer::getSumCredit, CreditOffer::setSumCredit);
         binder.readBean(creditOffer);
         binder.forField(sumOfMonth)
-                .withConverter(new StringToLongConverter("must be integer"))
+                .withConverter(new StringToLongConverter("must be long"))
                 .bind(CreditOffer::getSumOfMonth, CreditOffer::setSumOfMonth);
         binder.readBean(creditOffer);
         binder.forField(creditTerm)

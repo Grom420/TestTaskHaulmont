@@ -35,7 +35,7 @@ public class CreditEdit extends FormLayout {
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(creditName, creditLimit, interestRate, buttons);
         binder.forField(creditLimit)
-                .withConverter(new StringToLongConverter("must be integer"))
+                .withConverter(new StringToLongConverter("must be long"))
                 .bind(Credit::getCreditLimit, Credit::setCreditLimit);
         binder.readBean(credit);
         binder.forField(interestRate)
