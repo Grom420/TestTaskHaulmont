@@ -21,8 +21,6 @@ public class CreditOfferView extends VerticalLayout {
     private CreditOfferEdit creditOfferEdit;
     private PaymentServiceImpl paymentService;
 
-    private ClientServiceImpl clientService;
-    private CreditServiceImpl creditService;
 
     private Grid<CreditOffer> creditOfferGrid = new Grid<>(CreditOffer.class);
     private Grid<Payment> paymentGrid = new Grid<>(Payment.class);
@@ -32,8 +30,6 @@ public class CreditOfferView extends VerticalLayout {
                            CreditServiceImpl creditService,
                            PaymentServiceImpl paymentService){
         this.creditOfferServiceImpl = creditOfferServiceImpl;
-        this.clientService = clientService;
-        this.creditService = creditService;
         this.paymentService = paymentService;
         creditOfferEdit = new CreditOfferEdit(this,creditOfferServiceImpl, paymentService);
         creditOfferAddFormView = new CreditOfferAddFormView(this, creditOfferServiceImpl, clientService, creditService);

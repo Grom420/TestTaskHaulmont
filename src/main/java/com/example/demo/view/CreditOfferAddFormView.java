@@ -24,9 +24,6 @@ public class CreditOfferAddFormView extends VerticalLayout {
 
     private CreditOfferView creditOfferView;
     private CreditOfferServiceImpl creditOfferServiceImpl;
-    private ClientServiceImpl clientService;
-    private CreditServiceImpl creditService;
-
     private ComboBox<String> clientPassportLabel = new ComboBox<>("Client passport");
     private ComboBox<String> creditNameLabel = new ComboBox<>("Credit name");
     private TextField sumCredit = new TextField("Sum credit");
@@ -38,9 +35,6 @@ public class CreditOfferAddFormView extends VerticalLayout {
                                   CreditServiceImpl creditService){
         this.creditOfferView = creditOfferView;
         this.creditOfferServiceImpl = creditOfferServiceImpl;
-        this.clientService = clientService;
-        this.creditService = creditService;
-
         List<Client> clients = clientService.findAll();
         clientPassportLabel.setItems(clients
                 .stream()
