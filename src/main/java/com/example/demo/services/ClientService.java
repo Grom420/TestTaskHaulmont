@@ -9,5 +9,6 @@ public interface ClientService {
     boolean addClient(Client client);
     void updateClient(Client client);
     boolean removeClient(Client client);
+    boolean isOffer(Client client);
 }
 

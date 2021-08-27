@@ -9,4 +9,5 @@ public interface CreditService {
     List<Credit> findAll();
     void updateCredit(Credit credit);
     boolean removeCredit(Credit credit);
+    boolean isOffer(Credit credit);
 }

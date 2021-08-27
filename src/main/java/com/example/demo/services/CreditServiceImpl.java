@@ -51,7 +51,7 @@ public class CreditServiceImpl implements CreditService{
         return true;
     }
 
-    private boolean isOffer(Credit credit){
+    public boolean isOffer(Credit credit){
         return creditOfferRepos.findAll().stream().anyMatch(creditOffer -> creditOffer.getCreditUUID()
                 .equals(credit.getCreditUUID()));
     }

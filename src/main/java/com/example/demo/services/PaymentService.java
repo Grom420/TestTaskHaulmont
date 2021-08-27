@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PaymentService {
     List<Payment> findAll();
+    void deleteAll();
 }

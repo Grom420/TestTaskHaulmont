@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService{
         return true;
     }
 
-    private boolean isOffer(Client client){
+    public boolean isOffer(Client client){
         return creditOfferRepos.findAll().stream().anyMatch(creditOffer -> creditOffer.getClientUUID()
                 .equals(client.getClientUUID()));
     }

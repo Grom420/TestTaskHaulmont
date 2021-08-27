@@ -11,4 +11,6 @@ public interface CreditOfferService {
     boolean addCreditOffer(CreditOffer creditOffer);
     void updateCreditOffer(CreditOffer creditOffer);
     boolean removeCreditOffer(CreditOffer creditOffer);
+    long calculateSumOfMonth(CreditOffer creditOffer);
+    void calculatePayment(CreditOffer creditOffer);
 }
