@@ -17,14 +17,13 @@ public class Bank {
     @Column(name = "bank_UUID")
     private String bankUUID;
 
+    @OneToMany(mappedBy = "bank", fetch = FetchType.EAGER)
+    private Set<CreditOffer> creditOffers;
 
     public Bank() {
         this.id_bank = UUID.randomUUID();
         this.bankUUID = this.id_bank.toString();
     }
-
-    @OneToMany(mappedBy = "bank", fetch = FetchType.EAGER)
-    private Set<CreditOffer> creditOffers;
 
     public String getBankUUID() {
         return bankUUID;

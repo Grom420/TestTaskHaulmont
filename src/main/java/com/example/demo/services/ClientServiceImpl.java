@@ -15,10 +15,10 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService{
 
     @Autowired
-    ClientRepos clientRepos;
+    private ClientRepos clientRepos;
 
     @Autowired
-    CreditOfferRepos creditOfferRepos;
+    private CreditOfferRepos creditOfferRepos;
 
     public ClientServiceImpl(ClientRepos clientRepos) {
         this.clientRepos = clientRepos;

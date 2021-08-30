@@ -37,7 +37,7 @@ public class CreditView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("credit-grid");
         grid.setSizeFull();
-        grid.setColumns("creditUUID", "creditName", "creditLimit", "interestRate");
+        grid.setColumns("creditName", "creditLimit", "interestRate");
     }
 
     public void updateList() {

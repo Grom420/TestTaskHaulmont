@@ -38,7 +38,7 @@ public class ClientView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("contact-grid");
         grid.setSizeFull();
-        grid.setColumns("clientUUID", "name", "surname", "lastname" ,"email", "number", "passport");
+        grid.setColumns("name", "surname", "lastname" ,"email", "number", "passport");
     }
 
     public void updateList() {

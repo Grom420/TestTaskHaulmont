@@ -17,14 +17,6 @@ public class Credit {
     @OneToMany(mappedBy = "credit", fetch = FetchType.EAGER)
     private Set<CreditOffer> creditOffers;
 
-    public Set<CreditOffer> getCreditOffers() {
-        return creditOffers;
-    }
-
-    public void setCreditOffers(Set<CreditOffer> creditOffers) {
-        this.creditOffers = creditOffers;
-    }
-
     @Column(name = "credit_UUID")
     private String creditUUID;
 
@@ -34,16 +26,12 @@ public class Credit {
     @Column(name = "credit_name")
     private String creditName;
 
-    public String getCreditName() {
-        return creditName;
-    }
-
-    public void setCreditName(String creditName) {
-        this.creditName = creditName;
-    }
-
     @Column(name = "interest_rate")
     private int interestRate;
+
+    public Credit() {
+
+    }
 
     public Credit(long creditLimit, int interestRate, String creditName) {
         this.id_credit = UUID.randomUUID();
@@ -53,8 +41,20 @@ public class Credit {
         this.creditName = creditName;
     }
 
-    public Credit() {
+    public String getCreditName() {
+        return creditName;
+    }
 
+    public void setCreditName(String creditName) {
+        this.creditName = creditName;
+    }
+
+    public Set<CreditOffer> getCreditOffers() {
+        return creditOffers;
+    }
+
+    public void setCreditOffers(Set<CreditOffer> creditOffers) {
+        this.creditOffers = creditOffers;
     }
 
     public String getCreditUUID() {

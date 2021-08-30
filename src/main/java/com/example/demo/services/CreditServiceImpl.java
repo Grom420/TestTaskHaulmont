@@ -14,10 +14,10 @@ import java.util.List;
 public class CreditServiceImpl implements CreditService{
 
     @Autowired
-    CreditRepos creditRepos;
+    private CreditRepos creditRepos;
 
     @Autowired
-    CreditOfferRepos creditOfferRepos;
+    private CreditOfferRepos creditOfferRepos;
 
     public CreditServiceImpl(CreditRepos creditRepos) {
         this.creditRepos = creditRepos;

@@ -15,7 +15,7 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService{
 
     @Autowired
-    PaymentRepos paymentRepos;
+    private PaymentRepos paymentRepos;
 
     @Override
     public List<Payment> findAll() {

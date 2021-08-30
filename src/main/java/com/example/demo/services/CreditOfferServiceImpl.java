@@ -21,13 +21,13 @@ import java.util.List;
 public class CreditOfferServiceImpl implements CreditOfferService{
 
     @Autowired
-    CreditOfferRepos creditOfferRepos;
+    private CreditOfferRepos creditOfferRepos;
     @Autowired
-    ClientRepos clientRepos;
+    private ClientRepos clientRepos;
     @Autowired
-    CreditRepos creditRepos;
+    private CreditRepos creditRepos;
     @Autowired
-    PaymentRepos paymentRepos;
+    private PaymentRepos paymentRepos;
 
     public List<CreditOffer> findAll() {
         return creditOfferRepos.findAll();

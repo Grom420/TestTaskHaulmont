@@ -52,7 +52,7 @@ public class CreditOfferView extends VerticalLayout {
     private void configureGrid() {
         creditOfferGrid.addClassName("credit-grid");
         creditOfferGrid.setSizeFull();
-        creditOfferGrid.setColumns("offerUUID", "sumCredit", "creditTerm", "sumOfMonth");
+        creditOfferGrid.setColumns("sumCredit", "creditTerm", "sumOfMonth");
         addCustomColumns();
     }
 

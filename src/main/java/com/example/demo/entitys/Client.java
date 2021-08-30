@@ -21,14 +21,6 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<CreditOffer> creditOffers;
 
-    public Set<CreditOffer> getCreditOffers() {
-        return creditOffers;
-    }
-
-    public void setCreditOffers(Set<CreditOffer> creditOffers) {
-        this.creditOffers = creditOffers;
-    }
-
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -43,14 +35,6 @@ public class Client {
     @NotNull
     private String passport;
 
-    public String getPassport() {
-        return passport;
-    }
-
-    public void setPassport(String passport) {
-        this.passport = passport;
-    }
-
     public Client() {
 
     }
@@ -64,6 +48,22 @@ public class Client {
         this.email = email;
         this.number = number;
         this.passport = passport;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
+    }
+
+    public Set<CreditOffer> getCreditOffers() {
+        return creditOffers;
+    }
+
+    public void setCreditOffers(Set<CreditOffer> creditOffers) {
+        this.creditOffers = creditOffers;
     }
 
     public String getClientUUID() {
