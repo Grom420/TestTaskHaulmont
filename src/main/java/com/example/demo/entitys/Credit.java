@@ -27,7 +27,7 @@ public class Credit {
     private String creditName;
 
     @Column(name = "interest_rate")
-    private int interestRate;
+    private long interestRate;
 
     public Credit() {
 
@@ -81,11 +81,11 @@ public class Credit {
         this.creditLimit = creditLimit;
     }
 
-    public int getInterestRate() {
+    public long getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(int interestRate) {
+    public void setInterestRate(long interestRate) {
         this.interestRate = interestRate;
     }
 

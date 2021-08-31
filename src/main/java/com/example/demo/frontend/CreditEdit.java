@@ -39,7 +39,7 @@ public class CreditEdit extends FormLayout {
                 .bind(Credit::getCreditLimit, Credit::setCreditLimit);
         binder.readBean(credit);
         binder.forField(interestRate)
-                .withConverter(new StringToIntegerConverter("must be integer"))
+                .withConverter(new StringToLongConverter("must be long"))
                 .bind(Credit::getInterestRate, Credit::setInterestRate);
         binder.readBean(credit);
         binder.forField(creditName).bind(Credit::getCreditName, Credit::setCreditName);

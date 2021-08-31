@@ -12,6 +12,8 @@ import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -19,6 +21,10 @@ import java.util.List;
 
 @Service
 public class CreditOfferServiceImpl implements CreditOfferService{
+
+    private final static BigDecimal NUMBER_OF_MONTHS = new BigDecimal("12.0");
+    private final static BigDecimal DECIMAL = new BigDecimal("100.0");
+    private static final int PRECISION = 8;
 
     @Autowired
     private CreditOfferRepos creditOfferRepos;
@@ -81,21 +87,29 @@ public class CreditOfferServiceImpl implements CreditOfferService{
     }
 
     public long calculateSumOfMonth(CreditOffer creditOffer){ //вычисление суммы за один месяц с учетом процентов
-        double percent = creditOffer.getCredit().getInterestRate()/12.0/100.0;
-        double sum = creditOffer.getSumCredit();
-        double creditTerm = creditOffer.getCreditTerm();
-        return Math.round(sum*(percent+(percent/(Math.pow((percent+1), creditTerm*12)-1))));
+        BigDecimal percent = new BigDecimal(creditOffer.getCredit().getInterestRate())
+                .divide(NUMBER_OF_MONTHS, PRECISION, RoundingMode.CEILING)
+                .divide(DECIMAL, PRECISION, RoundingMode.CEILING);
+        long sum = creditOffer.getSumCredit();
+        int creditTermOfMonth = creditOffer.getCreditTerm()*NUMBER_OF_MONTHS.intValue();
+        BigDecimal percentAddOne = percent.add(BigDecimal.ONE);
+        BigDecimal denominator = percentAddOne.pow(creditTermOfMonth).subtract(BigDecimal.ONE);
+        System.out.println(denominator);
+        BigDecimal resultOfDivide = percent.divide(denominator, PRECISION, RoundingMode.CEILING);
+        return percent.add(resultOfDivide).multiply(BigDecimal.valueOf(sum)).longValue();
     }
 
     public void calculatePayment(CreditOffer creditOffer){
-        double percent = creditOffer.getCredit().getInterestRate()/12.0/100.0;
+        BigDecimal percent = new BigDecimal(creditOffer.getCredit().getInterestRate())
+                .divide(NUMBER_OF_MONTHS, PRECISION, RoundingMode.CEILING)
+                .divide(DECIMAL, PRECISION, RoundingMode.CEILING);
         long paymentSum = calculateSumOfMonth(creditOffer); //ежемесечная оплата
         long sumOfCredit = creditOffer.getSumCredit(); //общая сумма для оплаты кредита
         long sumOfPercent; //сумма процентов по кредиту
         long sumOfBody; //сумма тела кредита
         LocalDate localDate = LocalDate.now();
         for (int i = 0; i < creditOffer.getCreditTerm()*12-1; i++) { //построение таблицы графика платежей
-            sumOfPercent = Math.round(sumOfCredit*percent);
+            sumOfPercent = percent.multiply(BigDecimal.valueOf(sumOfCredit)).longValue();
             sumOfBody = paymentSum - sumOfPercent;
             sumOfCredit = sumOfCredit - sumOfBody;
             localDate = localDate.plusMonths(1);
