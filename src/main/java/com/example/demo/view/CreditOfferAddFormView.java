@@ -35,6 +35,7 @@ public class CreditOfferAddFormView extends VerticalLayout {
                                   CreditServiceImpl creditService){
         this.creditOfferView = creditOfferView;
         this.creditOfferServiceImpl = creditOfferServiceImpl;
+        setHelperText();
         List<Client> clients = clientService.findAll();
         clientPassportLabel.setItems(clients
                 .stream()
@@ -55,6 +56,10 @@ public class CreditOfferAddFormView extends VerticalLayout {
         add(add);
     }
 
+    private void setHelperText(){
+        sumCredit.setHelperText("The credit amount must not exceed the limit");
+        creditTerm.setHelperText("Positive number");
+    }
 
     private void addCreditOffer() {
         if(isEmptyFields()){
