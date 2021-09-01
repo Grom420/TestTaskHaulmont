@@ -49,7 +49,7 @@ public class ClientServiceImpl implements ClientService{
     public boolean removeClient(Client client){
         Client present = clientRepos.findByClientUUID(client.getClientUUID());
         if (isOffer(present)) {
-            Notification.show("This client is in the credit offer");
+            Notification.show("This client is in the credit offer").setPosition(Notification.Position.MIDDLE);
             return false;
         }
         clientRepos.delete(present);

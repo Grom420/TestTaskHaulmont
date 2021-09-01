@@ -38,13 +38,18 @@ public class CreditServiceImpl implements CreditService{
     }
 
     public void updateCredit(Credit credit) {
-        creditRepos.save(credit);
+        CreditOffer present = creditOfferRepos.findByCredit(credit);
+        if (present != null){
+            Notification.show("Impossible to change. The credit is in the credit offer.").setPosition(Notification.Position.MIDDLE);
+        } else {
+            creditRepos.save(credit);
+        }
     }
 
     public boolean removeCredit(Credit credit){
         Credit present = creditRepos.findByCreditUUID(credit.getCreditUUID());
         if (isOffer(present)) {
-            Notification.show("This credit is in the credit offer");
+            Notification.show("This credit is in the credit offer").setPosition(Notification.Position.MIDDLE);
             return false;
         }
         creditRepos.delete(present);

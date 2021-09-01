@@ -6,11 +6,16 @@ import com.example.demo.services.CreditServiceImpl;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
+import com.vaadin.flow.data.validator.RegexpValidator;
+import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class CreditEdit extends FormLayout {
 
@@ -34,15 +39,19 @@ public class CreditEdit extends FormLayout {
         HorizontalLayout buttons = new HorizontalLayout(update, delete);
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(creditName, creditLimit, interestRate, buttons);
+        RegexpValidator creditNameValidator = new RegexpValidator("Incorrect data","(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");
+        RegexpValidator numValidator = new RegexpValidator("Incorrect number", "(\\d{1,3}(?:\\S*\\d{3})*)");
         binder.forField(creditLimit)
+                .withValidator(numValidator)
                 .withConverter(new StringToLongConverter("must be long"))
                 .bind(Credit::getCreditLimit, Credit::setCreditLimit);
-        binder.readBean(credit);
         binder.forField(interestRate)
+                .withValidator(numValidator)
                 .withConverter(new StringToLongConverter("must be long"))
                 .bind(Credit::getInterestRate, Credit::setInterestRate);
-        binder.readBean(credit);
-        binder.forField(creditName).bind(Credit::getCreditName, Credit::setCreditName);
+        binder.forField(creditName)
+                .withValidator(creditNameValidator)
+                .bind(Credit::getCreditName, Credit::setCreditName);
         binder.readBean(credit);
         update.addClickListener(event -> update());
         delete.addClickListener(event -> delete());
@@ -56,10 +65,14 @@ public class CreditEdit extends FormLayout {
     }
 
     private void update() {
-        Credit credit = binder.getBean();
-        creditServiceImpl.updateCredit(credit);
-        creditView.updateList();
-        setCredit(null);
+        if (!binder.isValid()){
+            Notification.show("Please enter correct data").setPosition(Notification.Position.MIDDLE);
+        } else {
+            Credit credit = binder.getBean();
+            creditServiceImpl.updateCredit(credit);
+            creditView.updateList();
+            setCredit(null);
+        }
     }
 
     public void setCredit(Credit credit) {

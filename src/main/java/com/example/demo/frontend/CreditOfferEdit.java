@@ -7,11 +7,14 @@ import com.example.demo.view.CreditOfferView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.converter.StringToLongConverter;
+import com.vaadin.flow.data.validator.RegexpValidator;
 
 public class CreditOfferEdit extends FormLayout {
 
@@ -37,14 +40,14 @@ public class CreditOfferEdit extends FormLayout {
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(sumCredit, buttons);
         CreditOffer creditOffer = new CreditOffer();
+        RegexpValidator numValidator = new RegexpValidator("Incorrect number", "(\\d{1,3}(?:\\S*\\d{3})*)");
         binder.forField(sumCredit)
+                .withValidator(numValidator)
                 .withConverter(new StringToLongConverter("must be long"))
                 .bind(CreditOffer::getSumCredit, CreditOffer::setSumCredit);
-        binder.readBean(creditOffer);
         binder.forField(sumOfMonth)
                 .withConverter(new StringToLongConverter("must be long"))
                 .bind(CreditOffer::getSumOfMonth, CreditOffer::setSumOfMonth);
-        binder.readBean(creditOffer);
         binder.forField(creditTerm)
                 .withConverter(new StringToIntegerConverter("must be integer"))
                 .bind(CreditOffer::getCreditTerm, CreditOffer::setCreditTerm);
@@ -70,10 +73,16 @@ public class CreditOfferEdit extends FormLayout {
     }
 
     private void update() {
-        CreditOffer creditOffer = binder.getBean();
-        creditOfferService.updateCreditOffer(creditOffer);
-        creditOfferView.updateList();
-        setCreditOffer(null);
+        if(!binder.isValid()){
+            Notification.show("Incorrect data").setPosition(Notification.Position.MIDDLE);
+        } else if (binder.getBean().getSumCredit() >= binder.getBean().getCredit().getCreditLimit()){
+            Notification.show("Credit limit exceeded").setPosition(Notification.Position.MIDDLE);
+        } else {
+            CreditOffer creditOffer = binder.getBean();
+            creditOfferService.updateCreditOffer(creditOffer);
+            creditOfferView.updateList();
+            setCreditOffer(null);
+        }
     }
 
     public void setCreditOffer(CreditOffer creditOffer) {

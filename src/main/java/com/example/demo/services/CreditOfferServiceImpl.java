@@ -22,8 +22,8 @@ import java.util.List;
 @Service
 public class CreditOfferServiceImpl implements CreditOfferService{
 
-    private final static BigDecimal NUMBER_OF_MONTHS = new BigDecimal("12.0");
-    private final static BigDecimal DECIMAL = new BigDecimal("100.0");
+    private static final BigDecimal NUMBER_OF_MONTHS = new BigDecimal("12.0");
+    private static final BigDecimal DECIMAL = new BigDecimal("100.0");
     private static final int PRECISION = 8;
 
     @Autowired
@@ -45,18 +45,14 @@ public class CreditOfferServiceImpl implements CreditOfferService{
         CreditOffer present = creditOfferRepos.findByOfferUUID(creditOffer.getOfferUUID());
         if (client != null && credit != null && present == null){
             if (creditOffer.getSumCredit() > credit.getCreditLimit()){
-                Notification.show("The credit amount must not exceed the limit");
+                Notification.show("The credit amount must not exceed the limit").setPosition(Notification.Position.MIDDLE);
                 return false; //проверка на лимит кредита
-            }
-            if (creditOffer.getSumCredit() < 50000){
-                Notification.show("The credit amount is too small");
-                return false; //проверка на малый кредит
             }
             creditOffer.setCredit(credit);
             creditOffer.setClient(client);
             creditOffer.setSumOfMonth(calculateSumOfMonth(creditOffer));
             if (isDuplicatedCreditOffer(client, credit)){
-                Notification.show("Such a credit offer already exists");
+                Notification.show("Such a credit offer already exists").setPosition(Notification.Position.MIDDLE);
                 return false;
             }
             creditOfferRepos.save(creditOffer);
@@ -90,13 +86,12 @@ public class CreditOfferServiceImpl implements CreditOfferService{
         BigDecimal percent = new BigDecimal(creditOffer.getCredit().getInterestRate())
                 .divide(NUMBER_OF_MONTHS, PRECISION, RoundingMode.CEILING)
                 .divide(DECIMAL, PRECISION, RoundingMode.CEILING);
-        long sum = creditOffer.getSumCredit();
+        long sumCredit = creditOffer.getSumCredit();
         int creditTermOfMonth = creditOffer.getCreditTerm()*NUMBER_OF_MONTHS.intValue();
         BigDecimal percentAddOne = percent.add(BigDecimal.ONE);
         BigDecimal denominator = percentAddOne.pow(creditTermOfMonth).subtract(BigDecimal.ONE);
-        System.out.println(denominator);
         BigDecimal resultOfDivide = percent.divide(denominator, PRECISION, RoundingMode.CEILING);
-        return percent.add(resultOfDivide).multiply(BigDecimal.valueOf(sum)).longValue();
+        return percent.add(resultOfDivide).multiply(BigDecimal.valueOf(sumCredit)).longValue();
     }
 
     public void calculatePayment(CreditOffer creditOffer){
@@ -108,7 +103,7 @@ public class CreditOfferServiceImpl implements CreditOfferService{
         long sumOfPercent; //сумма процентов по кредиту
         long sumOfBody; //сумма тела кредита
         LocalDate localDate = LocalDate.now();
-        for (int i = 0; i < creditOffer.getCreditTerm()*12-1; i++) { //построение таблицы графика платежей
+        for (int i = 0; i < creditOffer.getCreditTerm()*NUMBER_OF_MONTHS.intValue()-1; i++) { //построение таблицы графика платежей
             sumOfPercent = percent.multiply(BigDecimal.valueOf(sumOfCredit)).longValue();
             sumOfBody = paymentSum - sumOfPercent;
             sumOfCredit = sumOfCredit - sumOfBody;
